@@ -26,6 +26,7 @@ var server = http.createServer(function(req, res) {
       }));
     }
 
+    queryObject.proxyTo = encodeURI(queryObject.proxyTo);
     // reset url to prevent node-http-proxy set path
     req.url = '';
 
