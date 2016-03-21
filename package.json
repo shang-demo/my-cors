@@ -1,0 +1,17 @@
+{
+  "name": "cors",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "./node_modules/.bin/pm2 start app.js --no-daemon",
+    "test": "mocha --recursive --timeout 10000 --harmony --bail test"
+  },
+  "dependencies": {
+    "cors": "^2.7.1",
+    "eventemitter3": "1.x.x",
+    "pm2": "^1.0.1",
+    "require-directory": "^2.1.1",
+    "requires-port": "^1.0.0"
+  },
+  "devDependencies": {
+  }
+}
