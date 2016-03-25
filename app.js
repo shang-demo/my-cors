@@ -58,5 +58,5 @@ proxy.on('error', function(err, req, res) {
 
 
 var port = config.env.port || 9000;
-var ip = config.env.ip || 'localhost';
+var ip = config.env.ip || null;
 server.listen(port, ip);
