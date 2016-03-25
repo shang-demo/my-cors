@@ -1,8 +1,11 @@
 {
   "name": "cors",
   "version": "0.1.0",
+  "engines": {
+    "node": "0.12.7"
+  },
   "scripts": {
-    "start": "./node_modules/.bin/pm2 start app.js --no-daemon",
+    "start": "NODE_ENV=coding ./node_modules/.bin/pm2 start app.js --no-daemon",
     "test": "mocha --recursive --timeout 10000 --harmony --bail test"
   },
   "dependencies": {
