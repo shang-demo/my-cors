@@ -6,13 +6,15 @@
   },
   "scripts": {
     "dev": "node-dev app.js",
-    "start": "PORT=1343 pm2 start app.js --name mycors",
+    "start": "PORT=1343 pm2 start app.js --name mycors:1343",
     "test": "mocha --recursive --timeout 10000 --harmony --bail test"
   },
   "dependencies": {
+    "bufferhelper": "^0.2.1",
     "cors": "^2.7.1",
     "eruda": "^0.5.9",
     "eventemitter3": "1.x.x",
+    "iconv-lite": "^0.4.13",
     "pm2": "^1.0.1",
     "require-directory": "^2.1.1",
     "requires-port": "^1.0.0"

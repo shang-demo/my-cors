@@ -77,6 +77,8 @@ var server = http.createServer(function(req, res) {
       req.headers['accept-encoding'] = null;
     }
 
+    queryObject.proxyTo = /^http/.test(queryObject.proxyTo) ? queryObject.proxyTo : 'http://' + queryObject.proxyTo;
+
     queryObject.proxyTo = encodeURI(queryObject.proxyTo);
     // reset url to prevent node-http-proxy set path
     req.url = '';
@@ -128,6 +130,6 @@ function modifyHtml(str) {
 }
 
 
-var port = config.env.port || 9000;
+var port = config.env.port || 1337;
 var ip = config.env.ip || null;
 server.listen(port, ip);
