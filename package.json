@@ -1,20 +1,21 @@
 {
-  "name": "cors",
+  "name": "my-cors",
   "version": "0.1.0",
   "engines": {
     "node": "0.12.7"
   },
   "scripts": {
-    "start": "NODE_ENV=coding ./node_modules/.bin/pm2 start app.js --no-daemon",
+    "dev": "node-dev app.js",
+    "start": "PORT=1343 pm2 start app.js --name mycors",
     "test": "mocha --recursive --timeout 10000 --harmony --bail test"
   },
   "dependencies": {
     "cors": "^2.7.1",
+    "eruda": "^0.5.9",
     "eventemitter3": "1.x.x",
     "pm2": "^1.0.1",
     "require-directory": "^2.1.1",
     "requires-port": "^1.0.0"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
