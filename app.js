@@ -58,18 +58,30 @@ proxy.on('proxyRes', function(proxyRes, req, res) {
 });
 
 var server = http.createServer(function(req, res) {
-  var queryObject = url.parse(req.url, true).query;
-  req.query = queryObject;
-
   cors(req, res, function() {
+
+    var queryObject = url.parse(req.url, true).query;
+    req.query = queryObject;
+
     if(!queryObject.proxyTo) {
-      res.writeHead(400, {
-        'Content-Type': 'text/json'
+      var redirectTo = parseReferToRedirect(req);
+      if(!redirectTo) {
+        res.writeHead(400, {
+          'Content-Type': 'text/json'
+        });
+        return res.end(JSON.stringify({
+          code: 400,
+          msg: 'need query proxyTo'
+        }));
+      }
+
+      queryObject.proxyTo = redirectTo;
+      console.log('redirectTo: ', redirectTo);
+      res.writeHead(301, {
+        Location: redirectTo
       });
-      return res.end(JSON.stringify({
-        code: 400,
-        msg: 'need query proxyTo'
-      }));
+      res.end();
+      return
     }
 
     if(queryObject.debug) {
@@ -109,6 +121,19 @@ proxy.on('error', function(err, req, res) {
   res.end(JSON.stringify(err));
 });
 
+
+function parseReferToRedirect(req) {
+  var referUrlParse = url.parse((req.headers || {}).referer || '', true);
+  var refererObj = referUrlParse.query;
+
+  refererObj.proxyTo = /^http/.test(refererObj.proxyTo) ? refererObj.proxyTo : 'http://' + refererObj.proxyTo;
+
+  var originObj = url.parse(refererObj.proxyTo || '', true);
+  if(!originObj.protocol || !originObj.host || originObj.host === 'undefined' || !req.url) {
+    return false;
+  }
+  return referUrlParse.protocol + '//' + referUrlParse.host + '?' + (refererObj.debug ? 'debug=1&' : '') + 'proxyTo=' + encodeURIComponent(originObj.protocol + '//' + originObj.host + req.url);
+}
 
 function modifyHtml(str) {
   if(/(<head.*?>)/.test(str)) {
