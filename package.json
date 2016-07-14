@@ -12,7 +12,7 @@
   "dependencies": {
     "bufferhelper": "^0.2.1",
     "cors": "^2.7.1",
-    "eruda": "^0.5.9",
+    "eruda": "^1.0.4",
     "eventemitter3": "1.x.x",
     "iconv-lite": "^0.4.13",
     "pm2": "^1.0.1",

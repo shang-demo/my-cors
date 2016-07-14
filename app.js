@@ -76,7 +76,6 @@ var server = http.createServer(function(req, res) {
       }
 
 
-
       if(req.method === 'POST') {
         queryObject.proxyTo = redirectTo.uri;
       }
@@ -100,7 +99,7 @@ var server = http.createServer(function(req, res) {
     // reset url to prevent node-http-proxy set path
     req.url = '';
 
-    console.log('method:', req.method, 'proxyTo: ', queryObject.proxyTo);
+    console.info(req.method, queryObject.proxyTo);
     if(!queryObject.type) {
       return proxy.web(req, res, {
         target: queryObject.proxyTo,
