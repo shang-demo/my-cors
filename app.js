@@ -75,13 +75,18 @@ var server = http.createServer(function(req, res) {
         }));
       }
 
-      queryObject.proxyTo = redirectTo;
-      console.log('redirectTo: ', redirectTo);
-      res.writeHead(301, {
-        Location: redirectTo
-      });
-      res.end();
-      return
+
+
+      if(req.method === 'POST') {
+        queryObject.proxyTo = redirectTo.uri;
+      }
+      else {
+        res.writeHead(301, {
+          Location: redirectTo.prefix + encodeURIComponent(redirectTo.uri)
+        });
+        res.end();
+        return;
+      }
     }
 
     if(queryObject.debug) {
@@ -132,7 +137,10 @@ function parseReferToRedirect(req) {
   if(!originObj.protocol || !originObj.host || originObj.host === 'undefined' || !req.url) {
     return false;
   }
-  return referUrlParse.protocol + '//' + referUrlParse.host + '?' + (refererObj.debug ? 'debug=1&' : '') + 'proxyTo=' + encodeURIComponent(originObj.protocol + '//' + originObj.host + req.url);
+  return {
+    prefix: referUrlParse.protocol + '//' + referUrlParse.host + '?' + (refererObj.debug ? 'debug=1&' : '') + 'proxyTo=',
+    uri: (originObj.protocol + '//' + originObj.host + req.url)
+  };
 }
 
 function modifyHtml(str) {
