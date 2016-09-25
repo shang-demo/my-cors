@@ -267,3 +267,4 @@ function getFirstPageHtml() {
 var port = config.env.port || 1337;
 var ip = config.env.ip || null;
 server.listen(port, ip);
+console.log('server listen on: ', ip, port);
