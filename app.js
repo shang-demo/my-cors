@@ -11,7 +11,7 @@ var httpProxy = require('./framework/http-proxy/index.js');
 
 // var erudaStr = './eruda.min.js';
 // var addStr = '<script>' + fs.readFileSync(erudaStr) + '</script><script>eruda.init();</script>';
-var addStr = '<script src="http://upload.xinshangshangxin.com/eruda.min.js"></script><script>eruda.init();</script>';
+var addStr = '<script src="//static.xinshangshangxin.com/eruda/1.0.5/eruda.min.js"></script><script>eruda.init();</script>';
 
 var proxy = httpProxy.createProxyServer({});
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
