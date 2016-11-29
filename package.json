@@ -6,7 +6,7 @@
   },
   "scripts": {
     "dev": "node-dev app.js",
-    "start": "PORT=1343 pm2 start app.js --name mycors:1343",
+    "start": "NODE_ENV=heroku pm2 start ./app.js --no-daemon",
     "test": "mocha --recursive --timeout 10000 --harmony --bail test"
   },
   "dependencies": {
