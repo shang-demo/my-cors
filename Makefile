@@ -11,4 +11,4 @@ initHeroku:
 	heroku create
 pushHeroku:
 	gsed -i 's/"start": .*/"start": "NODE_ENV=heroku pm2 start .\/app.js --no-daemon",/g' ./package.json
-	git add -A && git commit -m "heroku auto" && git push heroku master && heroku logs --tail
+	git push heroku master && heroku logs --tail
