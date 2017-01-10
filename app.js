@@ -9,6 +9,10 @@ var url = require('url');
 var utilities = require('./utilities.js');
 var httpProxy = require('./framework/http-proxy/index.js');
 
+process.on('uncaughtException', function(err) {
+  console.error('Error caught in uncaughtException event:', err);
+});
+
 // var erudaStr = './eruda.min.js';
 // var addStr = '<script>' + fs.readFileSync(erudaStr) + '</script><script>eruda.init();</script>';
 var addStr = '<script src="//static.xinshangshangxin.com/eruda/1.0.5/eruda.min.js"></script><script>eruda.init();</script>';
@@ -52,7 +56,7 @@ proxy.on('proxyRes', function (proxyRes, req, res) {
       // Disable cache for all http as well
       res.setHeader('cache-control', 'no-cache');
 
-      _writeHead.apply(this, arguments);
+      _writeHead.apply(res, arguments);
     };
 
     res.write = function (data) {
@@ -61,7 +65,7 @@ proxy.on('proxyRes', function (proxyRes, req, res) {
 
     res.end = function () {
       _write.call(res, modifyHtml(utilities.changeEncoding(bufferHelper.toBuffer())));
-      _end.apply(this, arguments);
+      _end.apply(res, arguments);
     };
   }
 });
