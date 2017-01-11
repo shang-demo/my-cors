@@ -83,6 +83,14 @@ var server = http.createServer(function (req, res) {
       return res.end(getFirstPageHtml());
     }
 
+    // leancloud不使用云函数和Hook
+    if(req.url === '/1.1/functions/_ops/metadatas') {
+      res.writeHead(404, {
+        'Content-Type': 'text/html'
+      });
+      return res.end('');
+    }
+
     var redirectAbsoluteUrl = getStartUrl(req, res);
     console.log('startUrl', redirectAbsoluteUrl);
     if (!redirectAbsoluteUrl || !/^http/.test(redirectAbsoluteUrl)) {

@@ -6,4 +6,4 @@ supervisor:
 push:
 	git push origin master
 pushProd:
-	git push coding master:my-cors
+	git push coding master:my-cors -f
