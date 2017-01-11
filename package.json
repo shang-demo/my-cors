@@ -6,7 +6,7 @@
   },
   "scripts": {
     "dev": "node-dev app.js",
-    "start": "NODE_ENV=heroku pm2 start ./app.js --no-daemon",
+    "start": "NODE_ENV=leancloud pm2 start ./app.js --no-daemon",
     "test": "mocha --recursive --timeout 10000 --harmony --bail test"
   },
   "dependencies": {
