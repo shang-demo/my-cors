@@ -4,8 +4,10 @@ var BufferHelper = require('bufferhelper');
 var cors = require('cors')();
 var fs = require('fs');
 var http = require('http');
+var path = require('path');
 var url = require('url');
 
+var indexHTML = fs.readFileSync(path.join(__dirname, './index.html'));
 var utilities = require('./utilities.js');
 var httpProxy = require('./framework/http-proxy/index.js');
 
@@ -80,7 +82,7 @@ var server = http.createServer(function (req, res) {
       res.writeHead(200, {
         'Content-Type': 'text/html'
       });
-      return res.end(getFirstPageHtml());
+      return res.end(indexHTML);
     }
 
     // leancloud不使用云函数和Hook
@@ -276,13 +278,6 @@ function getStartUrl(req, res) {
   console.log('redirectUri', redirectUri);
   return getAbsUrl(redirectUri, startUrl);
 }
-
-function getFirstPageHtml() {
-  return '<!DOCTYPE html><html><head><title>cors</title><style type="text/css">button{height:50px;display:inline-block;font-weight:400;text-align:center;cursor:pointer;background-image:none;border:1px solid transparent;white-space:nowrap;padding:6px 12px;font-size:14px;line-height:1.42857143;border-radius:4px;}button:hover{background-color:#e7e4e4;}input{height:48px;width:200px;font-size:26px;color:black;border-radius:3px;border:none;background-color:#CCCCCC;padding-left:6px;outline:none;vertical-align:bottom;}input[type="checkbox"]{width:20px;vertical-align:middle;display:inline-block;background-color:white;}#url{width:800px;font-size:25px;}</style></head><body><input type="url"id="url"><button id="redirect">redirect</button><script type="text/javascript">var getAbsoluteUrl=(function(){var a;return function(url){if(!a){a=document.createElement(\'a\');}' +
-    'a.href=url;return a.href;};})();var oRedirect=document.getElementById(\'redirect\');var oUrl=document.getElementById(\'url\');oRedirect.onclick=function(){if(!oUrl.value){alert(\'need redirect url!!!\');return;}window.location.href=getAbsoluteUrl(\'/url/\'+encodeURIComponent(oUrl.value));};</script></body></html>';
-  ;
-}
-
 
 var port = config.env.port || 1337;
 var ip = config.env.ip;
