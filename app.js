@@ -1,25 +1,23 @@
 require('./config/init.js');
 
-var BufferHelper = require('bufferhelper');
-var cors = require('cors')();
-var fs = require('fs');
-var http = require('http');
-var path = require('path');
-var url = require('url');
+const BufferHelper = require('bufferhelper');
+const cors = require('cors')();
+const fs = require('fs');
+const http = require('http');
+const path = require('path');
+const url = require('url');
 
-var indexHTML = fs.readFileSync(path.join(__dirname, './index.html'));
-var utilities = require('./utilities.js');
-var httpProxy = require('./framework/http-proxy/index.js');
+const indexHTML = fs.readFileSync(path.join(__dirname, './index.html'));
+const utilities = require('./utilities.js');
+const httpProxy = require('./framework/http-proxy/index.js');
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
   console.error('Error caught in uncaughtException event:', err);
 });
 
-// var erudaStr = './eruda.min.js';
-// var addStr = '<script>' + fs.readFileSync(erudaStr) + '</script><script>eruda.init();</script>';
-var addStr = '<script src="//static.xinshangshangxin.com/eruda/1.0.5/eruda.min.js"></script><script>eruda.init();</script>';
+const erudaScript = '<script src="//static.xinshangshangxin.com/eruda/1.0.5/eruda.min.js"></script><script>eruda.init();</script>';
 
-var proxy = httpProxy.createProxyServer({});
+const proxy = httpProxy.createProxyServer({});
 proxy.on('proxyReq', function (proxyReq, req, res, options) {
 });
 
@@ -28,8 +26,8 @@ proxy.on('proxyRes', function (proxyRes, req, res) {
     proxyRes.headers.location = '/url/' + encodeURIComponent(proxyRes.headers.location);
   }
 
-  var cookies = proxyRes.headers && proxyRes.headers['set-cookie'] || [];
-  var originCookies = res._headers && res._headers['set-cookie'] || [];
+  let cookies = proxyRes.headers && proxyRes.headers['set-cookie'] || [];
+  let originCookies = res._headers && res._headers['set-cookie'] || [];
   delete proxyRes.headers['set-cookie'];
   res.setHeader('Set-Cookie', cookies.concat(originCookies));
 
@@ -38,17 +36,17 @@ proxy.on('proxyRes', function (proxyRes, req, res) {
     && proxyRes.headers['content-type']
     && /text\/html/.test(proxyRes.headers['content-type'])) {
 
-    var bufferHelper = new BufferHelper();
+    let bufferHelper = new BufferHelper();
 
-    var _end = res.end;
-    var _writeHead = res.writeHead;
-    var _write = res.write;
+    let _end = res.end;
+    let _writeHead = res.writeHead;
+    let _write = res.write;
 
     res.writeHead = function () {
       if (proxyRes.headers && proxyRes.headers['content-length']) {
         res.setHeader(
           'content-length',
-          parseInt(proxyRes.headers['content-length'], 10) + addStr.length
+          parseInt(proxyRes.headers['content-length'], 10) + erudaScript.length
         );
       }
 
@@ -75,7 +73,7 @@ proxy.on('proxyRes', function (proxyRes, req, res) {
 
 // /url/:url
 
-var server = http.createServer(function (req, res) {
+const server = http.createServer(function (req, res) {
   cors(req, res, function () {
     console.log('\n');
     if (req.url === '/') {
@@ -86,14 +84,14 @@ var server = http.createServer(function (req, res) {
     }
 
     // leancloud不使用云函数和Hook
-    if(req.url === '/1.1/functions/_ops/metadatas') {
+    if (req.url === '/1.1/functions/_ops/metadatas') {
       res.writeHead(404, {
         'Content-Type': 'text/html'
       });
       return res.end('');
     }
 
-    var redirectAbsoluteUrl = getStartUrl(req, res);
+    let redirectAbsoluteUrl = getStartUrl(req, res);
     console.log('startUrl', redirectAbsoluteUrl);
     if (!redirectAbsoluteUrl || !/^http/.test(redirectAbsoluteUrl)) {
       res.writeHead(400, {
@@ -138,45 +136,18 @@ proxy.on('error', function (err, req, res) {
 });
 
 
-function getRedirectAbsoluteUrl(req, startUrl) {
-  if (!startUrl) {
-    console.log('no startUrl, try to get from req.headers.referer');
-
-    var referer = (req.headers || {}).referer || '';
-    if (!referer) {
-      console.log('no startUrl from url, cookie and req.headers.referer');
-      return false;
-    }
-
-    startUrl = referer;
-
-    // var referUrlParse = url.parse(referer, true);
-    // var refererObj = referUrlParse.query;
-    // startUrl = referUrlParse.protocol + '//' + referUrlParse.host + '?' + (refererObj.disableDebig ? 'disableDebug=1&' : '');
-  }
-
-  var redirectUri = req.url;
-  if (/\/url\/([^\/]+)/.test(redirectUri)) {
-    redirectUri = redirectUri.replace(/\/url\/([^\/]+)\/?/, '');
-  }
-
-  console.log('redirectUri', redirectUri, 'startUrl', startUrl);
-
-  return getAbsUrl(redirectUri, startUrl);
-}
-
 function modifyHtml(str) {
   if (/(<head.*?>)/.test(str)) {
     console.log('modifyHtml head match');
-    str = str.replace(RegExp.$1, RegExp.$1 + addStr);
+    str = str.replace(RegExp.$1, RegExp.$1 + erudaScript);
   }
   else if (/<body.*?>/.test(str)) {
     console.log('modifyHtml body match');
-    str = str.replace(RegExp.$1, RegExp.$1 + addStr);
+    str = str.replace(RegExp.$1, RegExp.$1 + erudaScript);
   }
   else if (/<html.*?>/.test(str)) {
     console.log('modifyHtml html match');
-    str = str.replace(RegExp.$1, RegExp.$1 + addStr);
+    str = str.replace(RegExp.$1, RegExp.$1 + erudaScript);
   }
   else {
     console.log('not find html or body');
@@ -191,37 +162,44 @@ function getAbsUrl(url, base) {
 
   if (!url) {
     return base;
-  } else if (/^[a-z][-+\.a-z0-9]*:/i.test(url)) {
+  }
+  else if (/^[a-z][-+\.a-z0-9]*:/i.test(url)) {
     // The scheme actually could contain any kind of alphanumerical unicode
     // character, but JavaScript regular expressions don't support unicode
     // character classes. Maybe /^[^:]+:/ or even /^.*:/ would be sufficient?
     return url;
-  } else if (url.slice(0, 2) === '//') {
+  }
+  else if (url.slice(0, 2) === '//') {
     return /^[^:]+:/.exec(base)[0] + url;
   }
 
-  var ch = url.charAt(0);
+  let ch = url.charAt(0);
   if (ch === '/') {
     if (/^file:/i.test(base)) {
       // file scheme has no hostname
       return 'file://' + url;
-    } else {
+    }
+    else {
       return /^[^:]+:\/*[^\/]+/i.exec(base)[0] + url;
     }
-  } else if (ch === '#') {
+  }
+  else if (ch === '#') {
     // assume "#" only occures at the end indicating the fragment
     return base.replace(/#.*$/, '') + url;
-  } else if (ch === '?') {
+  }
+  else if (ch === '?') {
     // assume "?" and "#" only occure at the end indicating the query
     // and the fragment
     return base.replace(/[\?#].*$/, '') + url;
-  } else {
-    var base, path;
+  }
+  else {
+    let base, path;
     if (/^file:/i.test(base)) {
       base = "file://";
       path = base.replace(/^file:\/{0,2}/i, '');
-    } else {
-      var match = /^([^:]+:\/*[^\/]+)(\/.*?)?(\?.*?)?(#.*)?$/.exec(base);
+    }
+    else {
+      let match = /^([^:]+:\/*[^\/]+)(\/.*?)?(\?.*?)?(#.*)?$/.exec(base);
       base = match[1];
       path = match[2] || "/";
     }
@@ -242,7 +220,7 @@ function getAbsUrl(url, base) {
 function getStartUrl(req, res) {
   req.cookies = {};
   (req.headers.cookie && req.headers.cookie.split(';') || []).reduce(function (oldValue, Cookie) {
-    var parts = Cookie.split('=');
+    let parts = Cookie.split('=');
     oldValue[parts[0].trim()] = decodeURIComponent(( parts[1] || '' ).trim());
     return oldValue;
   }, req.cookies);
@@ -251,27 +229,27 @@ function getStartUrl(req, res) {
 
   req.query = url.parse(req.url, true).query;
 
-  var startUrl = '';
+  let startUrl = '';
   if (/\/url\/([^\/]+)/.test(req.url)) {
-    var u = decodeURIComponent(RegExp.$1);
+    let u = decodeURIComponent(RegExp.$1);
     if (/^http/.test(u)) {
       console.log('use queryString startUrl', u);
       startUrl = u;
     }
   }
 
-  if(!startUrl) {
+  if (!startUrl) {
     console.log('use cookie startUrl', decodeURIComponent(req.cookies.startUrl || ''));
     startUrl = decodeURIComponent(req.cookies.startUrl || '');
   }
 
-  var expires = new Date();
+  let expires = new Date();
   expires.setDate(expires.getDate() + 1);
-  var cookieInfo = ['startUrl=' + encodeURIComponent(startUrl) + '; Expires=' + expires.toISOString() + '; path=/; HttpOnly'];
+  let cookieInfo = ['startUrl=' + encodeURIComponent(startUrl) + '; Expires=' + expires.toISOString() + '; path=/; HttpOnly'];
   res.setHeader('Set-Cookie', cookieInfo);
 
 
-  var redirectUri = req.url.replace(/.*\/url\//, '');
+  let redirectUri = req.url.replace(/.*\/url\//, '');
   if (/^http/.test(redirectUri)) {
     redirectUri = redirectUri.replace(/^[^\/]*/, '');
   }
@@ -279,7 +257,7 @@ function getStartUrl(req, res) {
   return getAbsUrl(redirectUri, startUrl);
 }
 
-var port = config.env.port || 1337;
-var ip = config.env.ip;
+const port = config.env.port || 1337;
+const ip = config.env.ip;
 server.listen(port, ip);
 console.log('server listen on: ', 'http://' + (ip || 'localhost') + ':' + port);
