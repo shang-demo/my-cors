@@ -45,8 +45,17 @@
     font-size: 25px;
   }</style>
 </head>
-<body><input type="url" id="url">
-<button id="redirect">open</button>
+<body>
+<div>
+  <input type="url" id="url">
+</div>
+<div>
+  <input type="url" id="proxyUri">
+</div>
+<div>
+  <input type="checkbox" id="eruda">
+  <button id="redirect">open</button>
+</div>
 <script type="text/javascript">
   var getAbsoluteUrl = (function () {
     var a;
@@ -58,10 +67,12 @@
       return a.href;
     };
   })();
-  
+
   var oRedirect = document.getElementById('redirect');
   var oUrl = document.getElementById('url');
-  
+  var oProxyUri = document.getElementById('proxyUri');
+  var oEruda = document.getElementById('eruda');
+
   oRedirect.onclick = function () {
     if (!oUrl.value) {
       alert('need redirect url!!!');
@@ -69,8 +80,19 @@
     }
 
     var url = getAbsoluteUrl('/url/' + encodeURIComponent(oUrl.value)) + oUrl.value.replace(/.*\??/, '?');
+    let params = [];
+    if (oProxyUri.value) {
+      params.push('proxyUri=' + encodeURIComponent(oProxyUri.value));
+    }
+    if (oEruda.checked === true) {
+      params.push('eruda=0');
+    }
+
+    console.info('oEruda.value: ', oEruda.value);
+    url = url + params.join('&');
+
     console.info('open url: ', url);
-    window.open(url)
+    window.open(url);
   };</script>
 </body>
 </html>

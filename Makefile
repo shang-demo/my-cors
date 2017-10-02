@@ -1,9 +1,3 @@
-.PHONY: all test clean static
+.PHONY: node-dev
 node-dev:
-	node-dev app.js
-supervisor:
-	supervisor -n error -i 'app/public/,app/views/,config/tasks/' app.js
-push:
-	git push origin master
-pushProd:
-	git push coding master:my-cors -f
+	node-dev index.js

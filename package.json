@@ -2,7 +2,7 @@
   "name": "my-cors",
   "version": "0.1.0",
   "engines": {
-    "node": ">=7.0.0"
+    "node": ">=8.0.0"
   },
   "scripts": {
     "dev": "node-dev app.js",
@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "bufferhelper": "^0.2.1",
-    "cors": "^2.7.1",
-    "eruda": "^1.0.4",
-    "eventemitter3": "1.x.x",
-    "http-proxy": "^1.15.1",
-    "iconv-lite": "^0.4.13",
-    "pm2": "^1.0.1",
+    "cors": "^2.8.4",
+    "eruda": "^1.2.6",
+    "http-proxy": "^1.16.2",
+    "iconv-lite": "^0.4.19",
+    "pm2": "^2.7.1",
+    "proxy-agent": "^2.1.0",
     "require-directory": "^2.1.1",
     "requires-port": "^1.0.0"
   },
