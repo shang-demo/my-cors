@@ -1,61 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head><title>cors</title>
-  <style type="text/css">button {
-    height: 50px;
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    cursor: pointer;
-    background-image: none;
-    border: 1px solid transparent;
-    white-space: nowrap;
-    padding: 6px 12px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    border-radius: 4px;
-  }
-
-  button:hover {
-    background-color: #e7e4e4;
-  }
-
-  input {
-    height: 48px;
-    width: 200px;
-    font-size: 26px;
-    color: black;
-    border-radius: 3px;
-    border: none;
-    background-color: #CCCCCC;
-    padding-left: 6px;
-    outline: none;
-    vertical-align: bottom;
-  }
-
-  input[type="checkbox"] {
-    width: 20px;
-    vertical-align: middle;
-    display: inline-block;
-    background-color: white;
-  }
-
-  #url {
-    width: 800px;
-    font-size: 25px;
-  }</style>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="//static.xinshangshangxin.com/favicon.ico">
+  <title>cors</title>
+  <link href="https://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div>
-  <input type="url" id="url">
+
+<div class="container">
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">url</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="url">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">proxyUri</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="proxyUri">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">eruda</label>
+    <div class="col-sm-10 form-check form-check-inline">
+      <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" id="eruda"> 开启
+      </label>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary" id="redirect">打开</button>
 </div>
-<div>
-  <input type="url" id="proxyUri">
-</div>
-<div>
-  <input type="checkbox" id="eruda">
-  <button id="redirect">open</button>
-</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"></script>
+<script src="https://cdn.bootcss.com/popper.js/1.12.5/umd/popper.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
   var getAbsoluteUrl = (function () {
     var a;
@@ -93,6 +76,7 @@
 
     console.info('open url: ', url);
     window.open(url);
-  };</script>
+  };
+</script>
 </body>
 </html>

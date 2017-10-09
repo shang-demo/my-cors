@@ -1,3 +1,3 @@
-.PHONY: node-dev
-node-dev:
-	node-dev index.js
+.PHONY: start
+start:
+	nodemon index.js
